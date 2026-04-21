@@ -763,23 +763,6 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .hero-content{padding:40px 20px}
   .cd-block{min-width:82px;padding:22px 16px}
 }
-/* ============ STAR BURST (entrada de textos) ============ */
-.star-burst{position:absolute;inset:-8px;pointer-events:none;z-index:5;overflow:visible}
-.star-burst-dot{
-  position:absolute;
-  width:var(--sz,10px);height:var(--sz,10px);
-  color:var(--gold);
-  opacity:0;
-  transform-origin:50% 50%;
-  will-change:transform,opacity;
-  filter:
-    drop-shadow(0 0 4px var(--gold))
-    drop-shadow(0 0 10px color-mix(in srgb, var(--gold) 70%, transparent))
-    drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 50%, transparent));
-}
-.star-burst-dot svg{width:100%;height:100%;display:block}
-[data-sparkle]{position:relative}
-
 /* ============ ITINERARIO ============ */
 .itinerary{text-align:center;padding:min(16vh,150px) 0}
 .itinerary h2{font-size:clamp(32px,4.5vw,52px);margin-bottom:12px}
@@ -793,51 +776,55 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 .itin-track{
   position:absolute;
   left:50%;top:0;bottom:0;
-  width:2px;
-  margin-left:-1px;
-  background:color-mix(in srgb, var(--accent) 18%, transparent);
-  border-radius:2px;
+  width:1px;
+  margin-left:0;
+  background:color-mix(in srgb, var(--accent) 14%, transparent);
   overflow:visible;
   z-index:1;
 }
 .itin-track-fill{
   position:absolute;
-  left:-1px;right:-1px;top:0;
-  width:4px;
-  height:0%;
-  background:linear-gradient(to bottom,
-    var(--gold) 0%,
-    var(--gold-soft) 45%,
-    var(--gold) 100%);
+  left:-1px;right:-1px;
+  width:3px;
+  top:0;height:0%;
+  background:linear-gradient(to bottom, var(--gold-soft) 0%, var(--gold) 100%);
   border-radius:4px;
   will-change:height;
   z-index:2;
 }
-.itin-track-fill::before{
-  content:'';
+/* Orbe viajero en la punta de la línea */
+.itin-head{
   position:absolute;
-  inset:-2px -10px;
-  background:linear-gradient(to bottom,
-    color-mix(in srgb, var(--gold) 85%, transparent),
-    color-mix(in srgb, var(--gold) 65%, transparent) 50%,
-    color-mix(in srgb, var(--gold) 85%, transparent));
-  filter:blur(10px);
-  border-radius:20px;
-  opacity:.9;
+  left:50%;top:0%;
+  transform:translate(-50%,-50%);
+  width:16px;height:16px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,.95) 0%, var(--gold) 45%, transparent 75%);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--gold) 20%, transparent),
+    0 0 12px 3px var(--gold),
+    0 0 28px 8px color-mix(in srgb, var(--gold) 55%, transparent),
+    0 0 54px 18px color-mix(in srgb, var(--gold) 22%, transparent);
+  will-change:top;
+  z-index:6;
   pointer-events:none;
+  animation:orbBreath 2.4s ease-in-out infinite;
 }
-.itin-track-fill::after{
-  content:'';
-  position:absolute;
-  inset:-8px -24px;
-  background:linear-gradient(to bottom,
-    color-mix(in srgb, var(--gold) 55%, transparent),
-    color-mix(in srgb, var(--accent) 55%, transparent) 50%,
-    color-mix(in srgb, var(--gold) 55%, transparent));
-  filter:blur(22px);
-  border-radius:40px;
-  opacity:.75;
-  pointer-events:none;
+@keyframes orbBreath{
+  0%,100%{
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--gold) 20%, transparent),
+      0 0 12px 3px var(--gold),
+      0 0 28px 8px color-mix(in srgb, var(--gold) 55%, transparent),
+      0 0 54px 18px color-mix(in srgb, var(--gold) 22%, transparent);
+  }
+  50%{
+    box-shadow:
+      0 0 0 5px color-mix(in srgb, var(--gold) 26%, transparent),
+      0 0 18px 5px var(--gold),
+      0 0 44px 14px color-mix(in srgb, var(--gold) 65%, transparent),
+      0 0 80px 28px color-mix(in srgb, var(--gold) 30%, transparent);
+  }
 }
 .itin-events{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:clamp(52px,8vh,96px);position:relative;z-index:2}
 .itin-event{
@@ -852,41 +839,30 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 .itin-event--right .itin-spacer{grid-column:1}
 .itin-event--left .itin-card{grid-column:1;text-align:right}
 .itin-event--left .itin-spacer{grid-column:3}
-.itin-star{
+.itin-marker{
   grid-column:2;
-  width:34px;height:34px;
+  width:14px;height:14px;
   margin:0 auto;
-  display:block;
-  color:color-mix(in srgb, var(--accent) 35%, transparent);
-  filter:drop-shadow(0 0 2px color-mix(in srgb, var(--accent) 30%, transparent));
-  transform-origin:50% 50%;
-  transition:color .45s ease, filter .45s ease, transform .55s cubic-bezier(.34,1.56,.64,1);
+  border-radius:50%;
+  background:var(--paper);
+  border:1.5px solid color-mix(in srgb, var(--accent) 32%, transparent);
   position:relative;
   z-index:3;
+  display:block;
+  transition:
+    border-color .5s ease,
+    background .5s ease,
+    transform .55s cubic-bezier(.34,1.56,.64,1),
+    box-shadow .5s ease;
 }
-.itin-star svg{width:100%;height:100%;display:block;overflow:visible}
-.itin-event.is-active .itin-star{
-  color:var(--gold);
-  transform:scale(1.4);
-  animation:starTwinkle 2.6s ease-in-out infinite;
-}
-@keyframes starTwinkle{
-  0%,100%{
-    transform:scale(1.4) rotate(0deg);
-    filter:
-      drop-shadow(0 0 6px var(--gold))
-      drop-shadow(0 0 14px var(--gold))
-      drop-shadow(0 0 28px color-mix(in srgb, var(--gold) 80%, transparent))
-      drop-shadow(0 0 52px color-mix(in srgb, var(--accent) 55%, transparent));
-  }
-  50%{
-    transform:scale(1.55) rotate(72deg);
-    filter:
-      drop-shadow(0 0 10px var(--gold))
-      drop-shadow(0 0 22px var(--gold))
-      drop-shadow(0 0 44px color-mix(in srgb, var(--gold) 90%, transparent))
-      drop-shadow(0 0 78px color-mix(in srgb, var(--accent) 70%, transparent));
-  }
+.itin-event.is-active .itin-marker{
+  border-color:var(--gold);
+  background:color-mix(in srgb, var(--gold) 18%, var(--paper));
+  transform:scale(1.35);
+  box-shadow:
+    0 0 0 5px color-mix(in srgb, var(--gold) 13%, transparent),
+    0 0 0 10px color-mix(in srgb, var(--gold) 5%, transparent),
+    0 0 18px color-mix(in srgb, var(--gold) 55%, transparent);
 }
 .itin-card{
   padding:22px 26px;
@@ -932,8 +908,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   .itin-wrap{padding-left:48px;padding-right:14px}
   .itin-track{left:22px;margin-left:-1px}
   .itin-events{gap:46px}
-  .itin-event{grid-template-columns:34px 1fr;gap:18px}
-  .itin-star{grid-column:1}
+  .itin-event{grid-template-columns:14px 1fr;gap:22px}
+  .itin-marker{grid-column:1}
   .itin-card{grid-column:2 !important;text-align:left !important}
   .itin-spacer{display:none}
   .itin-time{font-size:22px}
@@ -1223,6 +1199,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       <div class="itin-wrap" id="itin">
         <div class="itin-track" aria-hidden="true">
           <div class="itin-track-fill" id="itin-fill"></div>
+          <div class="itin-head" id="itin-head"></div>
         </div>
         <ul class="itin-events">
           <li class="itin-event itin-event--right">
@@ -1231,7 +1208,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
               <div class="itin-name">Recepción</div>
               <div class="itin-desc">Bienvenida con música en vivo y cóctel de llegada en el patio principal.</div>
             </div>
-            <span class="itin-star" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5l2.9 7.3 7.9.6-6 5.1 1.9 7.7L12 18l-6.7 4.2 1.9-7.7-6-5.1 7.9-.6z"/></svg></span>
+            <span class="itin-marker" aria-hidden="true"></span>
             <div class="itin-spacer" aria-hidden="true"></div>
           </li>
           <li class="itin-event itin-event--left">
@@ -1240,7 +1217,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
               <div class="itin-name">Ceremonia</div>
               <div class="itin-desc">Nos unimos en matrimonio en la Parroquia de San Miguel Arcángel.</div>
             </div>
-            <span class="itin-star" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5l2.9 7.3 7.9.6-6 5.1 1.9 7.7L12 18l-6.7 4.2 1.9-7.7-6-5.1 7.9-.6z"/></svg></span>
+            <span class="itin-marker" aria-hidden="true"></span>
             <div class="itin-spacer" aria-hidden="true"></div>
           </li>
           <li class="itin-event itin-event--right">
@@ -1249,7 +1226,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
               <div class="itin-name">Cóctel</div>
               <div class="itin-desc">Bocadillos de autor y brindis al atardecer con vista a la ciudad.</div>
             </div>
-            <span class="itin-star" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5l2.9 7.3 7.9.6-6 5.1 1.9 7.7L12 18l-6.7 4.2 1.9-7.7-6-5.1 7.9-.6z"/></svg></span>
+            <span class="itin-marker" aria-hidden="true"></span>
             <div class="itin-spacer" aria-hidden="true"></div>
           </li>
           <li class="itin-event itin-event--left">
@@ -1258,7 +1235,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
               <div class="itin-name">Cena</div>
               <div class="itin-desc">Menú de tres tiempos y palabras de los padrinos bajo las estrellas.</div>
             </div>
-            <span class="itin-star" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5l2.9 7.3 7.9.6-6 5.1 1.9 7.7L12 18l-6.7 4.2 1.9-7.7-6-5.1 7.9-.6z"/></svg></span>
+            <span class="itin-marker" aria-hidden="true"></span>
             <div class="itin-spacer" aria-hidden="true"></div>
           </li>
           <li class="itin-event itin-event--right">
@@ -1267,7 +1244,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
               <div class="itin-name">Primer baile</div>
               <div class="itin-desc">Abrimos la pista y comienza la celebración. Que nadie se quede sentado.</div>
             </div>
-            <span class="itin-star" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5l2.9 7.3 7.9.6-6 5.1 1.9 7.7L12 18l-6.7 4.2 1.9-7.7-6-5.1 7.9-.6z"/></svg></span>
+            <span class="itin-marker" aria-hidden="true"></span>
             <div class="itin-spacer" aria-hidden="true"></div>
           </li>
           <li class="itin-event itin-event--left">
@@ -1276,7 +1253,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
               <div class="itin-name">Despedida</div>
               <div class="itin-desc">Tornaboda con recuerdos y una última copa antes de cerrar la noche.</div>
             </div>
-            <span class="itin-star" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5l2.9 7.3 7.9.6-6 5.1 1.9 7.7L12 18l-6.7 4.2 1.9-7.7-6-5.1 7.9-.6z"/></svg></span>
+            <span class="itin-marker" aria-hidden="true"></span>
             <div class="itin-spacer" aria-hidden="true"></div>
           </li>
         </ul>
@@ -1584,51 +1561,6 @@ function splitToWords(el){
 }
 
 // ------ STAR BURST — entrada de textos con estrellitas ------
-const STAR_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.5l2.9 7.3 7.9.6-6 5.1 1.9 7.7L12 18l-6.7 4.2 1.9-7.7-6-5.1 7.9-.6z"/></svg>';
-function sparkleBurst(el){
-  if(prefersReduced) return;
-  if(getComputedStyle(el).position === 'static') el.style.position = 'relative';
-  const layer = document.createElement('span');
-  layer.className = 'star-burst';
-  layer.setAttribute('aria-hidden','true');
-  el.appendChild(layer);
-  const n = 6 + Math.floor(Math.random()*3);
-  const stars = [];
-  for(let i=0;i<n;i++){
-    const s = document.createElement('span');
-    s.className = 'star-burst-dot';
-    const sz = 6 + Math.random()*10;
-    s.style.setProperty('--sz', sz+'px');
-    s.style.left = (Math.random()*100) + '%';
-    s.style.top  = (Math.random()*100) + '%';
-    s.innerHTML = STAR_SVG;
-    layer.appendChild(s);
-    stars.push(s);
-  }
-  gsap.timeline({onComplete:()=>layer.remove()})
-    .fromTo(stars, {scale:0, rotation:0, opacity:0},
-      {scale:1, rotation:180, opacity:1, duration:.55, stagger:.05, ease:'back.out(2.2)'})
-    .to(stars, {scale:0, rotation:360, opacity:0, duration:.7, stagger:.04, ease:'power2.in'}, '+=.35');
-}
-function wireSparkle(selector){
-  document.querySelectorAll(selector).forEach(el => {
-    ScrollTrigger.create({
-      trigger: el,
-      start: 'top 88%',
-      once: true,
-      onEnter: () => sparkleBurst(el)
-    });
-  });
-}
-wireSparkle([
-  '.hero-eyebrow','.hero-name-p','.hero-name-l','.hero-date','.hero-place',
-  '.eyebrow','h1','h2','h3',
-  '.script','.countdown-sub','.itinerary-sub','.gifts-sub',
-  '.date-hero .date-day','.date-hero .date-month','.date-hero .date-year',
-  '.loc-name','.kids-text','.album-text','.rsvp-text','.dress-sub','.dress-note',
-  '.verse','.story-p','.footer-names','.footer-script'
-].join(','));
-
 // ------ LOADER + HERO INTRO ------
 const pChars = splitToChars(document.querySelector('.hero-name-p'));
 const lChars = splitToChars(document.querySelector('.hero-name-l'));
@@ -1739,9 +1671,10 @@ gsap.fromTo('.countdown .eyebrow, .countdown h2, .countdown-sub',{opacity:0,y:14
 (() => {
   const wrap = document.getElementById('itin');
   const fill = document.getElementById('itin-fill');
+  const head = document.getElementById('itin-head');
   if(!wrap || !fill) return;
   const events = Array.from(wrap.querySelectorAll('.itin-event'));
-  const nodes  = events.map(e => e.querySelector('.itin-star'));
+  const nodes  = events.map(e => e.querySelector('.itin-marker'));
 
   // entrada de tarjetas (una vez)
   gsap.fromTo(events, {opacity:0, y:36}, {
@@ -1769,7 +1702,9 @@ gsap.fromTo('.countdown .eyebrow, .countdown h2, .countdown-sub',{opacity:0,y:14
     scrub: 0.6,
     onUpdate: self => {
       const p = self.progress;
-      fill.style.height = (p * 100).toFixed(2) + '%';
+      const pct = (p * 100).toFixed(2) + '%';
+      fill.style.height = pct;
+      if(head) head.style.top = pct;
       for(let i=0;i<events.length;i++){
         const threshold = nodePositions[i] || 0;
         if(p >= threshold - 0.02){
