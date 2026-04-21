@@ -272,14 +272,29 @@ h1 em,h2 em,h3 em{font-style:italic;font-weight:500;color:var(--accent)}
 .section-bg{background:var(--bg);padding:min(18vh,170px) 0;position:relative;contain:layout paint}
 .section-surface{background:var(--surface);padding:min(18vh,170px) 0;position:relative;contain:layout paint}
 /* Dot texture */
-.section-bg::before,.section-surface::before,.section-paper::before{
+.section-bg::before{
   content:'';position:absolute;inset:0;
-  background-image:
-    radial-gradient(circle, color-mix(in srgb, var(--accent) 9%, transparent) 1px, transparent 1px),
-    radial-gradient(circle, color-mix(in srgb, var(--gold) 7%, transparent) 1px, transparent 1px);
-  background-size:42px 42px, 42px 42px;
-  background-position:0 0, 21px 21px;
-  pointer-events:none;z-index:0;
+  background-image:url('img1.png'),url('img4.png');
+  background-size:160px auto,160px auto;
+  background-position:0 0,80px 80px;
+  background-repeat:repeat;
+  opacity:.045;pointer-events:none;z-index:0;
+}
+.section-surface::before{
+  content:'';position:absolute;inset:0;
+  background-image:url('img2.png'),url('img5.png');
+  background-size:160px auto,160px auto;
+  background-position:0 0,80px 80px;
+  background-repeat:repeat;
+  opacity:.045;pointer-events:none;z-index:0;
+}
+.section-paper::before{
+  content:'';position:absolute;inset:0;
+  background-image:url('img3.png'),url('portada.jpg');
+  background-size:160px auto,160px auto;
+  background-position:0 0,80px 80px;
+  background-repeat:repeat;
+  opacity:.045;pointer-events:none;z-index:0;
 }
 /* Corner bracket ornaments */
 .section-bg::after,.section-surface::after,.section-paper::after{
@@ -819,55 +834,33 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 .itin-track{
   position:absolute;
   left:50%;top:0;bottom:0;
-  width:1px;
-  margin-left:0;
-  background:color-mix(in srgb, var(--accent) 14%, transparent);
+  width:0;
   overflow:visible;
   z-index:1;
+  pointer-events:none;
 }
+/* Rayo de luz — crece con scaleY desde arriba, sin repintar layout */
 .itin-track-fill{
   position:absolute;
-  left:-1px;right:-1px;
-  width:3px;
-  top:0;height:0%;
-  background:linear-gradient(to bottom, var(--gold-soft) 0%, var(--gold) 100%);
-  border-radius:4px;
-  will-change:height;
-  z-index:2;
-}
-/* Orbe viajero en la punta de la línea */
-.itin-head{
-  position:absolute;
-  left:50%;top:0%;
-  transform:translate(-50%,-50%);
-  width:16px;height:16px;
-  border-radius:50%;
-  background:radial-gradient(circle, rgba(255,255,255,.95) 0%, var(--gold) 45%, transparent 75%);
+  left:-2px;width:4px;
+  top:0;height:100%;
+  transform:scaleY(0);
+  transform-origin:top center;
+  background:linear-gradient(to bottom,
+    transparent 0%,
+    var(--gold-soft) 4%,
+    var(--gold) 42%,
+    var(--gold) 58%,
+    var(--gold-soft) 96%,
+    transparent 100%
+  );
   box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--gold) 20%, transparent),
-    0 0 12px 3px var(--gold),
-    0 0 28px 8px color-mix(in srgb, var(--gold) 55%, transparent),
-    0 0 54px 18px color-mix(in srgb, var(--gold) 22%, transparent);
-  will-change:top;
-  z-index:6;
-  pointer-events:none;
-  animation:orbBreath 2.4s ease-in-out infinite;
-}
-@keyframes orbBreath{
-  0%,100%{
-    box-shadow:
-      0 0 0 3px color-mix(in srgb, var(--gold) 20%, transparent),
-      0 0 12px 3px var(--gold),
-      0 0 28px 8px color-mix(in srgb, var(--gold) 55%, transparent),
-      0 0 54px 18px color-mix(in srgb, var(--gold) 22%, transparent);
-  }
-  50%{
-    box-shadow:
-      0 0 0 5px color-mix(in srgb, var(--gold) 26%, transparent),
-      0 0 18px 5px var(--gold),
-      0 0 44px 14px color-mix(in srgb, var(--gold) 65%, transparent),
-      0 0 80px 28px color-mix(in srgb, var(--gold) 30%, transparent);
-  }
+    0 0 5px 2px var(--gold),
+    0 0 18px 9px color-mix(in srgb, var(--gold) 52%, transparent),
+    0 0 46px 24px color-mix(in srgb, var(--gold) 20%, transparent),
+    0 0 90px 48px color-mix(in srgb, var(--gold)  9%, transparent);
+  border-radius:2px;
+  will-change:transform;
 }
 .itin-events{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:clamp(52px,8vh,96px);position:relative;z-index:2}
 .itin-event{
@@ -884,28 +877,19 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 .itin-event--left .itin-spacer{grid-column:3}
 .itin-marker{
   grid-column:2;
-  width:14px;height:14px;
+  width:10px;height:10px;
   margin:0 auto;
   border-radius:50%;
-  background:var(--paper);
-  border:1.5px solid color-mix(in srgb, var(--accent) 32%, transparent);
-  position:relative;
-  z-index:3;
-  display:block;
-  transition:
-    border-color .5s ease,
-    background .5s ease,
-    transform .55s cubic-bezier(.34,1.56,.64,1),
-    box-shadow .5s ease;
+  background:color-mix(in srgb, var(--accent) 20%, var(--paper));
+  border:1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  position:relative;z-index:3;display:block;
+  opacity:.4;
+  transition:opacity .45s ease, background .45s ease, border-color .45s ease;
 }
 .itin-event.is-active .itin-marker{
-  border-color:var(--gold);
-  background:color-mix(in srgb, var(--gold) 18%, var(--paper));
-  transform:scale(1.35);
-  box-shadow:
-    0 0 0 5px color-mix(in srgb, var(--gold) 13%, transparent),
-    0 0 0 10px color-mix(in srgb, var(--gold) 5%, transparent),
-    0 0 18px color-mix(in srgb, var(--gold) 55%, transparent);
+  opacity:1;
+  background:var(--gold);
+  border-color:var(--gold-deep);
 }
 .itin-card{
   padding:22px 26px;
@@ -949,7 +933,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 .itin-event.is-active .itin-time{color:var(--gold-deep)}
 @media (max-width:680px){
   .itin-wrap{padding-left:48px;padding-right:14px}
-  .itin-track{left:22px;margin-left:-1px}
+  .itin-track{left:24px;margin-left:0}
   .itin-events{gap:46px}
   .itin-event{grid-template-columns:14px 1fr;gap:22px}
   .itin-marker{grid-column:1}
@@ -1244,7 +1228,6 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       <div class="itin-wrap" id="itin">
         <div class="itin-track" aria-hidden="true">
           <div class="itin-track-fill" id="itin-fill"></div>
-          <div class="itin-head" id="itin-head"></div>
         </div>
         <ul class="itin-events">
           <li class="itin-event itin-event--right">
@@ -1716,7 +1699,6 @@ gsap.fromTo('.countdown .eyebrow, .countdown h2, .countdown-sub',{opacity:0,y:14
 (() => {
   const wrap = document.getElementById('itin');
   const fill = document.getElementById('itin-fill');
-  const head = document.getElementById('itin-head');
   if(!wrap || !fill) return;
   const events = Array.from(wrap.querySelectorAll('.itin-event'));
   const nodes  = events.map(e => e.querySelector('.itin-marker'));
@@ -1747,9 +1729,7 @@ gsap.fromTo('.countdown .eyebrow, .countdown h2, .countdown-sub',{opacity:0,y:14
     scrub: 0.6,
     onUpdate: self => {
       const p = self.progress;
-      const pct = (p * 100).toFixed(2) + '%';
-      fill.style.height = pct;
-      if(head) head.style.top = pct;
+      fill.style.transform = 'scaleY(' + p.toFixed(4) + ')';
       for(let i=0;i<events.length;i++){
         const threshold = nodePositions[i] || 0;
         if(p >= threshold - 0.02){
