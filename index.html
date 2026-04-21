@@ -48,7 +48,7 @@ body{
 }
 
 .wrap{position:relative;z-index:2;overflow:clip}
-.container{max-width:1240px;margin:0 auto;padding:0 clamp(24px,4vw,56px)}
+.container{max-width:1240px;margin:0 auto;padding:0 clamp(24px,4vw,56px);position:relative;z-index:1}
 
 h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:-.015em;line-height:1.12;color:var(--accent-deep)}
 h1 em,h2 em,h3 em{font-style:italic;font-weight:500;color:var(--accent)}
@@ -271,6 +271,30 @@ h1 em,h2 em,h3 em{font-style:italic;font-weight:500;color:var(--accent)}
 /* ============ SECCIONES BASE ============ */
 .section-bg{background:var(--bg);padding:min(18vh,170px) 0;position:relative;contain:layout paint}
 .section-surface{background:var(--surface);padding:min(18vh,170px) 0;position:relative;contain:layout paint}
+/* Dot texture */
+.section-bg::before,.section-surface::before,.section-paper::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(circle, color-mix(in srgb, var(--accent) 9%, transparent) 1px, transparent 1px),
+    radial-gradient(circle, color-mix(in srgb, var(--gold) 7%, transparent) 1px, transparent 1px);
+  background-size:42px 42px, 42px 42px;
+  background-position:0 0, 21px 21px;
+  pointer-events:none;z-index:0;
+}
+/* Corner bracket ornaments */
+.section-bg::after,.section-surface::after,.section-paper::after{
+  content:'';position:absolute;inset:28px;
+  background:
+    linear-gradient(color-mix(in srgb,var(--gold) 30%,transparent) 0 0) top left / 52px 1px no-repeat,
+    linear-gradient(color-mix(in srgb,var(--gold) 30%,transparent) 0 0) top left / 1px 52px no-repeat,
+    linear-gradient(color-mix(in srgb,var(--gold) 30%,transparent) 0 0) top right / 52px 1px no-repeat,
+    linear-gradient(color-mix(in srgb,var(--gold) 30%,transparent) 0 0) top right / 1px 52px no-repeat,
+    linear-gradient(color-mix(in srgb,var(--gold) 30%,transparent) 0 0) bottom left / 52px 1px no-repeat,
+    linear-gradient(color-mix(in srgb,var(--gold) 30%,transparent) 0 0) bottom left / 1px 52px no-repeat,
+    linear-gradient(color-mix(in srgb,var(--gold) 30%,transparent) 0 0) bottom right / 52px 1px no-repeat,
+    linear-gradient(color-mix(in srgb,var(--gold) 30%,transparent) 0 0) bottom right / 1px 52px no-repeat;
+  pointer-events:none;z-index:0;
+}
 .section-paper{background:var(--paper);padding:min(18vh,170px) 0;position:relative;contain:layout paint}
 
 /* ============ VERSO ============ */
@@ -298,12 +322,31 @@ h1 em,h2 em,h3 em{font-style:italic;font-weight:500;color:var(--accent)}
 .verse-sig::before{left:-12px}
 .verse-sig::after{right:-12px}
 
+.mono-wm{
+  font-family:var(--script);
+  font-size:clamp(160px,26vw,360px);
+  color:var(--accent);
+  opacity:.045;
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  line-height:1;white-space:nowrap;
+  pointer-events:none;user-select:none;
+  z-index:0;
+}
 /* ============ FECHA HERO ============ */
 .date-hero{
   position:relative;padding:min(22vh,220px) 0;
-  background:linear-gradient(rgba(30,47,78,.62),rgba(30,47,78,.5)),url('foto1.jpg') center/cover no-repeat;
+  background:
+    linear-gradient(to bottom,
+      #1E2F4E 0%,
+      rgba(30,47,78,.78) 14%,
+      rgba(30,47,78,.52) 50%,
+      rgba(30,47,78,.78) 86%,
+      #1E2F4E 100%
+    ),
+    url('img1.png') center/cover no-repeat;
   color:#F8F5EC;text-align:center;isolation:isolate;overflow:hidden;
-  contain:layout paint;
 }
 .date-hero::before{
   content:"";position:absolute;inset:32px;
@@ -1057,6 +1100,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 
   <!-- HISTORIA -->
   <section class="section-surface">
+    <span class="mono-wm" aria-hidden="true">P &amp; L</span>
     <div class="container">
       <div class="story">
         <svg class="story-ornament" viewBox="0 0 100 40" fill="none" aria-hidden="true">
@@ -1192,6 +1236,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 
   <!-- ITINERARIO -->
   <section class="section-paper itinerary">
+    <span class="mono-wm" aria-hidden="true">P &amp; L</span>
     <div class="container">
       <div class="eyebrow">Itinerario</div>
       <h2>El <em>recorrido</em> de la noche</h2>
@@ -1314,14 +1359,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       <div class="wheel" id="wheel">
         <span class="wheel-spoke" aria-hidden="true"></span>
         <span class="wheel-spoke wheel-spoke--inner" aria-hidden="true"></span>
-        <div class="wheel-item" style="--i:0"><div class="wheel-item-inner"><img src="portada.jpg" alt="" loading="lazy"></div></div>
-        <div class="wheel-item" style="--i:1"><div class="wheel-item-inner"><img src="foto1.jpg" alt="" loading="lazy"></div></div>
-        <div class="wheel-item" style="--i:2"><div class="wheel-item-inner"><img src="foto2.jpg" alt="" loading="lazy"></div></div>
-        <div class="wheel-item" style="--i:3"><div class="wheel-item-inner"><img src="foto3.jpg" alt="" loading="lazy"></div></div>
-        <div class="wheel-item" style="--i:4"><div class="wheel-item-inner"><img src="portada.jpg" alt="" loading="lazy"></div></div>
-        <div class="wheel-item" style="--i:5"><div class="wheel-item-inner"><img src="foto1.jpg" alt="" loading="lazy"></div></div>
-        <div class="wheel-item" style="--i:6"><div class="wheel-item-inner"><img src="foto2.jpg" alt="" loading="lazy"></div></div>
-        <div class="wheel-item" style="--i:7"><div class="wheel-item-inner"><img src="foto3.jpg" alt="" loading="lazy"></div></div>
+        <div class="wheel-item" style="--i:0"><div class="wheel-item-inner"><img src="img1.png" alt="" loading="lazy"></div></div>
+        <div class="wheel-item" style="--i:1"><div class="wheel-item-inner"><img src="img2.png" alt="" loading="lazy"></div></div>
+        <div class="wheel-item" style="--i:2"><div class="wheel-item-inner"><img src="img3.png" alt="" loading="lazy"></div></div>
+        <div class="wheel-item" style="--i:3"><div class="wheel-item-inner"><img src="img4.png" alt="" loading="lazy"></div></div>
+        <div class="wheel-item" style="--i:4"><div class="wheel-item-inner"><img src="img5.png" alt="" loading="lazy"></div></div>
+        <div class="wheel-item" style="--i:5"><div class="wheel-item-inner"><img src="portada.jpg" alt="" loading="lazy"></div></div>
+        <div class="wheel-item" style="--i:6"><div class="wheel-item-inner"><img src="foto1.jpg" alt="" loading="lazy"></div></div>
+        <div class="wheel-item" style="--i:7"><div class="wheel-item-inner"><img src="foto2.jpg" alt="" loading="lazy"></div></div>
       </div>
       <div class="wheel-hub" aria-hidden="true">
         <svg viewBox="0 0 60 60" fill="none">
